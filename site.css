@@ -197,8 +197,8 @@ figure img { display: block; width: 100%; height: auto; }
 
 /* ── Status bar: the editor's word count ───────────────────────────────────────── */
 
-.status { position: fixed; right: 1rem; bottom: 0.75rem; z-index: 10; display: flex; gap: 0.75rem; padding: 0.35rem 0.7rem; border-radius: 7px; background: var(--paper); font-size: 12px; color: var(--markup); box-shadow: 0 0 0 1px var(--rule); }
-.status .mode { color: var(--muted); }
+.status { position: fixed; right: 1rem; bottom: 0.75rem; z-index: 10; display: flex; gap: 0.75rem; padding: 0.35rem 0.7rem; border-radius: 7px; background: var(--paper); font-size: 12px; color: var(--muted); box-shadow: 0 0 0 1px var(--rule); }
+.status .mode { color: var(--ink); }
 .status { transition: opacity 0.3s; }
 .status.clear { opacity: 0; visibility: hidden; pointer-events: none; }
 .status:empty { display: none; }
