@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="live">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marka — Support</title>
+<meta name="description" content="Help with Marka: the trial, restoring purchases, the command line tool and Quick Look.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FBFAF7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1B1D" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Marka — Support">
+<meta property="og:description" content="Help with Marka: the trial, restoring purchases, the command line tool and Quick Look.">
+<meta property="og:image" content="https://zhenlonghe.github.io/marka/icon.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preload" href="fonts/CommitMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
+<script>
+  // Before first paint: the visitor's language, so the other one never flashes.
+  (function () {
+    var lang;
+    try { lang = localStorage.getItem("marka.lang"); } catch (e) {}
+    var query = /[?&]lang=(en|zh)/.exec(location.search);
+    if (query) lang = query[1];
+    if (!lang) lang = /^zh/i.test((navigator.languages || [navigator.language])[0] || "") ? "zh" : "en";
+    document.documentElement.dataset.lang = lang;
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : "en";
+  })();
+</script>
+</head>
+<body>
+<!--
+THESIS: The page is a Marka document in Live mode; ⌘/ turns the whole page back into its Markdown. Refuses the hero-screenshot-plus-feature-grid.
+OWN-WORLD: Marka's own editor: paper #FBFAF7 / ink #26251F (dark #1B1B1D / #DAD8D2), markup grey #A8A69E, accent #3A6EA5, orange caret #F2701A; Commit Mono with Noto Sans SC at 17/1.75 on a 38em measure; syntax hanging in the gutter; macOS window and Quick Look frames around real renders.
+STORY: A writer sees what Marka is (small, fast, native, bilingual typesetting), proves Live mode on the page itself, sees Finder and terminal fit, reads the honest price.
+FIRST VIEWPORT: Icon, "# Marka" large, the one-sentence pitch ending in a blinking caret, the App Store line, then the real editor window rising into view; top right: Live/Source and EN/中文; bottom right: the word-count status bar.
+FORM: Candidate 1 of 7 on the ordered list ("this page is a Marka document"); seed adb9ee64.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+<header class="chrome">
+  <a class="home" href="./"><img src="favicon.png" alt="" width="18" height="18"><span>Marka</span></a>
+  <span class="file">support.md</span>
+  <div class="controls">
+    <div class="segmented" role="group" aria-label="View" data-label-en="View" data-label-zh="视图">
+      <button type="button" data-mode="live" aria-pressed="true">Live</button>
+      <button type="button" data-mode="source" aria-pressed="false" data-en="Source" data-zh="源码">Source</button>
+    </div>
+    <div class="segmented" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-set-lang="zh" lang="zh-Hans" aria-pressed="false">中文</button>
+    </div>
+  </div>
+</header>
+
+<main id="document">
+<article lang="en" data-lang="en" data-title="Marka — Support" data-description="Help with Marka: the trial, restoring purchases, the command line tool and Quick Look.">
+<h1 class="block" id="support"><span class="m hang"># </span>Support</h1>
+<p class="block">Questions about Marka, answered. Anything else: <a href="mailto:zhenlonghe@gmail.com?subject=Marka"><span class="m">[</span>zhenlonghe@gmail.com<span class="m">](mailto:zhenlonghe@gmail.com?subject=Marka)</span></a>.</p>
+<h2 class="block" id="how-does-the-trial-work"><span class="m hang">## </span>How does the trial work?</h2>
+<p class="block">Choose <strong><span class="m">**</span>Start 14-Day Trial<span class="m">**</span></strong> when Marka offers it, or from <strong><span class="m">**</span>Marka ▸ Marka Pro…<span class="m">**</span></strong>. The trial is a free in-app purchase tied to your Apple Account, so it starts once and follows you to your other Macs. When it ends, Marka goes back to the free version. Your documents and settings are not touched.</p>
+<h2 class="block" id="i-bought-marka-pro-but-it-is-locked-on-this-mac"><span class="m hang">## </span>I bought Marka Pro, but it is locked on this Mac</h2>
+<p class="block">Open <strong><span class="m">**</span>Marka ▸ Marka Pro…<span class="m">**</span></strong> and choose <strong><span class="m">**</span>Restore Purchases<span class="m">**</span></strong>. Make sure the App Store is signed in with the Apple Account you bought it with.</p>
+<h2 class="block" id="how-do-i-install-the-command-line-tool"><span class="m hang">## </span>How do I install the command line tool?</h2>
+<p class="block">Choose <strong><span class="m">**</span>Marka ▸ Install Command Line Tool…<span class="m">**</span></strong> and pick a folder on your <code><span class="m">`</span>PATH<span class="m">`</span></code>, such as <code><span class="m">`</span>/opt/homebrew/bin<span class="m">`</span></code>. If the folder belongs to the system, for example <code><span class="m">`</span>/usr/local/bin<span class="m">`</span></code>, Marka shows a one-line command to run in Terminal instead.</p>
+<div class="block code"><span class="m fence">```sh</span><pre><code><span class="t-fn">marka</span> notes.md        <span class="t-com">  # open a file</span>
+<span class="t-fn">marka</span> notes.md:42     <span class="t-com">  # at line 42</span>
+<span class="t-fn">marka</span> .               <span class="t-com">  # this folder, in the sidebar</span>
+<span class="t-fn">git</span> log <span class="t-op">|</span> marka -     <span class="t-com">  # whatever you pipe in</span>
+<span class="t-fn">marka</span> <span class="t-kw">--help</span>          <span class="t-com">  # every option</span></code></pre><span class="m fence">```</span></div>
+<h2 class="block" id="quick-look-does-not-show-markdown-previews"><span class="m hang">## </span>Quick Look does not show Markdown previews</h2>
+<p class="block">Open Marka once after installing it. If the preview still does not appear, check that Marka is turned on in <strong><span class="m">**</span>System Settings ▸ General ▸ Login Items &amp; Extensions ▸ Quick Look<span class="m">**</span></strong>.</p>
+<h2 class="block" id="something-else"><span class="m hang">## </span>Something else</h2>
+<p class="block">Write to <a href="mailto:zhenlonghe@gmail.com?subject=Marka"><span class="m">[</span>zhenlonghe@gmail.com<span class="m">](mailto:zhenlonghe@gmail.com?subject=Marka)</span></a>. It helps to include your Marka and macOS versions (<strong><span class="m">**</span>Marka ▸ About Marka<span class="m">**</span></strong>) and, for a formatting problem, the Markdown that shows it.</p>
+<div class="block rule"><span class="m">---</span><hr></div>
+<p class="block"><a href="./"><span class="m">[</span>Marka<span class="m">](./)</span></a> · <a href="privacy.html"><span class="m">[</span>Privacy<span class="m">](privacy.html)</span></a> · © 2026 Zhenlong He</p>
+</article>
+<article lang="zh-Hans" data-lang="zh" data-title="Marka — 支持" data-description="Marka 常见问题：试用、恢复购买、命令行工具与 Quick Look。">
+<h1 class="block" id="支持"><span class="m hang"># </span>支持</h1>
+<p class="block">关于 Marka 的常见问题。其他问题请写信到 <a href="mailto:zhenlonghe@gmail.com?subject=Marka"><span class="m">[</span>zhenlonghe@gmail.com<span class="m">](mailto:zhenlonghe@gmail.com?subject=Marka)</span></a>。</p>
+<h2 class="block" id="试用怎么算"><span class="m hang">## </span>试用怎么算？</h2>
+<p class="block">在 Marka 弹出的面板里，或 <strong><span class="m">**</span>Marka ▸ Marka Pro…<span class="m">**</span></strong> 中选择<strong><span class="m">**</span>开始 14 天试用<span class="m">**</span></strong>。试用是一个免费的 App 内购买，记在你的 Apple 账户上，只能开始一次，换一台 Mac 也一样。到期后 Marka 回到免费版，文档和设置都不受影响。</p>
+<h2 class="block" id="买了-pro-这台-mac-上却没解锁"><span class="m hang">## </span>买了 Pro，这台 Mac 上却没解锁</h2>
+<p class="block">打开 <strong><span class="m">**</span>Marka ▸ Marka Pro…<span class="m">**</span></strong>，选择<strong><span class="m">**</span>恢复购买<span class="m">**</span></strong>。请确认 App Store 登录的是购买时用的 Apple 账户。</p>
+<h2 class="block" id="怎么安装命令行工具"><span class="m hang">## </span>怎么安装命令行工具？</h2>
+<p class="block">选择 <strong><span class="m">**</span>Marka ▸ 安装命令行工具…<span class="m">**</span></strong>，选一个在 <code><span class="m">`</span>PATH<span class="m">`</span></code> 里的文件夹，比如 <code><span class="m">`</span>/opt/homebrew/bin<span class="m">`</span></code>。如果文件夹属于系统（比如 <code><span class="m">`</span>/usr/local/bin<span class="m">`</span></code>），Marka 会给出一行命令，在终端里执行即可。</p>
+<div class="block code"><span class="m fence">```sh</span><pre><code><span class="t-fn">marka</span> notes.md        <span class="t-com">  # 打开文件</span>
+<span class="t-fn">marka</span> notes.md:42     <span class="t-com">  # 跳到第 42 行</span>
+<span class="t-fn">marka</span> .               <span class="t-com">  # 在边栏打开当前文件夹</span>
+<span class="t-fn">git</span> log <span class="t-op">|</span> marka -     <span class="t-com">  # 打开管道输入</span>
+<span class="t-fn">marka</span> <span class="t-kw">--help</span>          <span class="t-com">  # 查看全部选项</span></code></pre><span class="m fence">```</span></div>
+<h2 class="block" id="quick-look-不显示-markdown-预览"><span class="m hang">## </span>Quick Look 不显示 Markdown 预览</h2>
+<p class="block">安装后先打开一次 Marka。仍然不显示的话，到<strong><span class="m">**</span>系统设置 ▸ 通用 ▸ 登录项与扩展 ▸ Quick Look<span class="m">**</span></strong> 里确认 Marka 已打开。</p>
+<h2 class="block" id="其他问题"><span class="m hang">## </span>其他问题</h2>
+<p class="block">请写信到 <a href="mailto:zhenlonghe@gmail.com?subject=Marka"><span class="m">[</span>zhenlonghe@gmail.com<span class="m">](mailto:zhenlonghe@gmail.com?subject=Marka)</span></a>。最好附上 Marka 和 macOS 的版本（<strong><span class="m">**</span>Marka ▸ 关于 Marka<span class="m">**</span></strong>）；排版问题请附上出问题的 Markdown。</p>
+<div class="block rule"><span class="m">---</span><hr></div>
+<p class="block"><a href="./"><span class="m">[</span>Marka<span class="m">](./)</span></a> · <a href="privacy.html"><span class="m">[</span>隐私<span class="m">](privacy.html)</span></a> · © 2026 Zhenlong He</p>
+</article>
+</main>
+
+<footer class="status" aria-live="off"><span class="mode"></span><span class="count"></span></footer>
+<script src="site.js" defer></script>
+</body>
+</html>

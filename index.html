@@ -1,118 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-mode="live">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marka – Markdown Editor for Mac</title>
-<meta name="description" content="Marka is a fast, native Markdown editor for macOS. Support, questions and contact.">
-<link rel="stylesheet" href="style.css">
+<title>Marka — a small, fast Markdown editor for Mac</title>
+<meta name="description" content="Marka renders Markdown as you write, sets Chinese and English together, and opens in about a tenth of a second. Native, 17 MB, no subscription.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FBFAF7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1B1D" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Marka — a small, fast Markdown editor for Mac">
+<meta property="og:description" content="Marka renders Markdown as you write, sets Chinese and English together, and opens in about a tenth of a second. Native, 17 MB, no subscription.">
+<meta property="og:image" content="https://zhenlonghe.github.io/marka/icon.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preload" href="fonts/CommitMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
+<script>
+  // Before first paint: the visitor's language, so the other one never flashes.
+  (function () {
+    var lang;
+    try { lang = localStorage.getItem("marka.lang"); } catch (e) {}
+    var query = /[?&]lang=(en|zh)/.exec(location.search);
+    if (query) lang = query[1];
+    if (!lang) lang = /^zh/i.test((navigator.languages || [navigator.language])[0] || "") ? "zh" : "en";
+    document.documentElement.dataset.lang = lang;
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : "en";
+  })();
+</script>
 </head>
 <body>
-<header>
-  <a class="home" href="./">Marka</a>
-  <nav>
-    <a href="./" aria-current="page">Support</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="#zh" lang="zh-Hans">中文</a>
-  </nav>
+<!--
+THESIS: The page is a Marka document in Live mode; ⌘/ turns the whole page back into its Markdown. Refuses the hero-screenshot-plus-feature-grid.
+OWN-WORLD: Marka's own editor: paper #FBFAF7 / ink #26251F (dark #1B1B1D / #DAD8D2), markup grey #A8A69E, accent #3A6EA5, orange caret #F2701A; Commit Mono with Noto Sans SC at 17/1.75 on a 38em measure; syntax hanging in the gutter; macOS window and Quick Look frames around real renders.
+STORY: A writer sees what Marka is (small, fast, native, bilingual typesetting), proves Live mode on the page itself, sees Finder and terminal fit, reads the honest price.
+FIRST VIEWPORT: Icon, "# Marka" large, the one-sentence pitch ending in a blinking caret, the App Store line, then the real editor window rising into view; top right: Live/Source and EN/中文; bottom right: the word-count status bar.
+FORM: Candidate 1 of 7 on the ordered list ("this page is a Marka document"); seed adb9ee64.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+<header class="chrome">
+  <a class="home" href="./"><img src="favicon.png" alt="" width="18" height="18"><span>Marka</span></a>
+  <span class="file">index.md</span>
+  <div class="controls">
+    <div class="segmented" role="group" aria-label="View" data-label-en="View" data-label-zh="视图">
+      <button type="button" data-mode="live" aria-pressed="true">Live</button>
+      <button type="button" data-mode="source" aria-pressed="false" data-en="Source" data-zh="源码">Source</button>
+    </div>
+    <div class="segmented" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-set-lang="zh" lang="zh-Hans" aria-pressed="false">中文</button>
+    </div>
+  </div>
 </header>
 
-<main>
-<h1>Marka</h1>
-<p class="lede">A fast, native Markdown editor for Mac, made for Chinese and English writing alike.</p>
-
-<h2>Free and Pro</h2>
-<p>Marka is free to download. Every Pro feature can be tried for 14 days; after that you keep the free version, or unlock Pro once and keep it forever. No subscription.</p>
-<div class="tiers">
-  <div>
-    <h3>Free</h3>
-    <ul>
-      <li>Open and read any Markdown file</li>
-      <li>Edit in source mode</li>
-      <li>Find and replace, with regular expressions</li>
-      <li>The <code>marka</code> command line tool</li>
-      <li>Quick Look previews in Finder</li>
-    </ul>
-  </div>
-  <div>
-    <h3>Pro</h3>
-    <ul>
-      <li>Live mode</li>
-      <li>Export to HTML, PDF and rich text</li>
-      <li>Vim mode</li>
-      <li>Focus and typewriter modes</li>
-      <li>Folder sidebar, Quick Open and outline</li>
-    </ul>
-  </div>
-</div>
-
-<h2>Questions</h2>
-
-<h3>How does the trial work?</h3>
-<p>Choose <strong>Start 14-Day Trial</strong> when Marka offers it, or from <strong>Marka ▸ Marka Pro…</strong>. The trial is a free in-app purchase tied to your Apple Account, so it starts once and follows you to your other Macs. When it ends, Marka goes back to the free version. Your documents and settings are not touched.</p>
-
-<h3>I bought Marka Pro, but it is locked on this Mac</h3>
-<p>Open <strong>Marka ▸ Marka Pro…</strong> and choose <strong>Restore Purchases</strong>. Make sure you are signed in to the App Store with the Apple Account you bought it with.</p>
-
-<h3>How do I install the command line tool?</h3>
-<p>Choose <strong>Marka ▸ Install Command Line Tool…</strong> and pick a folder on your <code>PATH</code>, such as <code>/opt/homebrew/bin</code>. Then <code>marka file.md</code> opens a file, <code>marka .</code> opens a folder, and <code>echo text | marka -</code> opens piped text. If the folder belongs to the system (for example <code>/usr/local/bin</code>), Marka shows a one-line command to run in Terminal instead.</p>
-
-<h3>Quick Look does not show Markdown previews</h3>
-<p>Open Marka once after installing it. If the preview still does not appear, check that Marka is turned on in <strong>System Settings ▸ General ▸ Login Items &amp; Extensions ▸ Quick Look</strong>.</p>
-
-<h3>Something else</h3>
-<p>Write to <a href="mailto:zhenlonghe@gmail.com?subject=Marka">zhenlonghe@gmail.com</a>. It helps to include your Marka and macOS versions (<strong>Marka ▸ About Marka</strong>) and, for a formatting problem, the Markdown that shows it.</p>
+<main id="document">
+<article lang="en" data-lang="en" data-title="Marka — a small, fast Markdown editor for Mac" data-description="Marka renders Markdown as you write, sets Chinese and English together, and opens in about a tenth of a second. Native, 17 MB, no subscription.">
+<div class="block image"><p class="src"><span class="m">![Marka app icon](icon.png)</span></p><figure class="icon"><img src="icon.png" alt="Marka app icon" width="128" height="128"></figure></div>
+<h1 class="block" id="marka"><span class="m hang"># </span>Marka</h1>
+<p class="block">A small, fast Markdown editor for the Mac. It renders as you write, sets Chinese and English together the way a typesetter would, and opens in about a tenth of a second.<span class="caret" aria-hidden="true"></span></p>
+<p class="block"><strong><span class="m">**</span>Coming soon to the Mac App Store<span class="m">**</span></strong> · free to download · macOS 15.2 or later</p>
+<div class="block image"><p class="src"><span class="m">![Marka in Live mode, editing notes.md](shots/editor-en.webp)</span></p><figure class="window"><div class="bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="name">notes.md</span></div><picture><source srcset="shots/editor-en-dark.webp" media="(prefers-color-scheme: dark)"><img src="shots/editor-en-light.webp" alt="Marka in Live mode, editing notes.md" width="1560" height="1050" loading="lazy" decoding="async"></picture></figure></div>
+<h2 class="block" id="small-and-fast"><span class="m hang">## </span>Small, and fast</h2>
+<p class="block">Marka is a native Mac app, not a web page in a window. Everything it needs, fonts and code highlighting for 17 languages included, fits in a 17 MB download.</p>
+<div class="block table"><table><thead><tr><th style="text-align:left"></th><th style="text-align:right"></th></tr></thead><tbody><tr><td style="text-align:left">Launch to first frame</td><td style="text-align:right">0.12 s</td></tr><tr><td style="text-align:left">Open a 1 MB, 84,000-line document</td><td style="text-align:right">0.13 s</td></tr><tr><td style="text-align:left">Keystroke to screen, 99th percentile</td><td style="text-align:right">1.8 ms</td></tr><tr><td style="text-align:left">Download</td><td style="text-align:right">17 MB</td></tr></tbody></table><pre class="src m">| | |
+|---|---:|
+| Launch to first frame | 0.12 s |
+| Open a 1 MB, 84,000-line document | 0.13 s |
+| Keystroke to screen, 99th percentile | 1.8 ms |
+| Download | 17 MB |</pre></div>
+<p class="block note">Measured with release builds on a MacBook Pro (M4 Pro), macOS 27.</p>
+<h2 class="block" id="live-mode-or-the-source"><span class="m hang">## </span>Live mode, or the source</h2>
+<p class="block">Live mode renders everything except the block you are in, which opens up as plain Markdown. The text never jumps, and nothing hides in a preview pane. Press <kbd>⌘/</kbd> and the whole document turns back into source.</p>
+<blockquote class="block"><p><span class="m hang">&gt; </span>This page is set the way Marka sets a document.<br><span class="m hang">&gt; </span>Press ⌘/, or click any paragraph.</p></blockquote>
+<h2 class="block" id="chinese-and-english-set-together"><span class="m hang">## </span>Chinese and English, set together</h2>
+<ul class="block"><li><span class="m hang bullet">- </span>A quarter em between Han and Latin, whether or not you typed the space</li><li><span class="m hang bullet">- </span>Punctuation kept off the start of a line</li><li><span class="m hang bullet">- </span>Chinese emphasis in Kai beside <em><span class="m">*</span>italic<span class="m">*</span></em> Latin</li><li><span class="m hang bullet">- </span>A monospace Latin face paired with Source Han Sans, at a calm 1.75 line height</li></ul>
+<h2 class="block" id="wherever-a-mac-opens-files"><span class="m hang">## </span>Wherever a Mac opens files</h2>
+<h3 class="block" id="quick-look"><span class="m hang">### </span>Quick Look</h3>
+<p class="block">Select a Markdown file in Finder and press Space. The preview comes from the same renderer as the editor and its exports, in light and dark.</p>
+<div class="block image"><p class="src"><span class="m">![Quick Look preview of notes.md in Finder](shots/quicklook-en.webp)</span></p><figure class="quicklook"><div class="bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="name">notes.md</span><span class="open" aria-hidden="true">Marka</span></div><picture><source srcset="shots/quicklook-en-dark.webp" media="(prefers-color-scheme: dark)"><img src="shots/quicklook-en-light.webp" alt="Quick Look preview of notes.md in Finder" width="1290" height="1050" loading="lazy" decoding="async"></picture></figure></div>
+<h3 class="block" id="the-marka-command"><span class="m hang">### </span>The <code><span class="m">`</span>marka<span class="m">`</span></code> command</h3>
+<div class="block code"><span class="m fence">```sh</span><pre><code><span class="t-fn">marka</span> notes.md        <span class="t-com">  # open a file</span>
+<span class="t-fn">marka</span> notes.md:42     <span class="t-com">  # at line 42</span>
+<span class="t-fn">marka</span> .               <span class="t-com">  # this folder, in the sidebar</span>
+<span class="t-fn">git</span> log <span class="t-op">|</span> marka -     <span class="t-com">  # whatever you pipe in</span>
+<span class="t-fn">marka</span> <span class="t-kw">-s</span> README.md    <span class="t-com">  # straight to source mode</span></code></pre><span class="m fence">```</span></div>
+<p class="block">Install it from <strong><span class="m">**</span>Marka ▸ Install Command Line Tool…<span class="m">**</span></strong> into any folder on your <code><span class="m">`</span>PATH<span class="m">`</span></code>.</p>
+<h3 class="block" id="the-keyboard"><span class="m hang">### </span>The keyboard</h3>
+<p class="block">An optional Vim mode with Markdown text objects (<code><span class="m">`</span>i*<span class="m">`</span></code>, <code><span class="m">`</span>il<span class="m">`</span></code>) and word motions that step through Chinese by word. Headings on <kbd>⌘1</kbd>–<kbd>⌘6</kbd>, Quick Open on <kbd>⌘P</kbd>, the outline on <kbd>⇧⌘O</kbd>.</p>
+<h3 class="block" id="and-the-rest"><span class="m hang">### </span>And the rest</h3>
+<ul class="block"><li><span class="m hang bullet">- </span>Export to HTML, PDF or rich text, set like the editor</li><li><span class="m hang bullet">- </span>Focus on the sentence or paragraph; typewriter scrolling</li><li><span class="m hang bullet">- </span>Tables rendered in place; code highlighted in 17 languages</li><li><span class="m hang bullet">- </span>Paste an image and it is saved in <code><span class="m">`</span>assets/<span class="m">`</span></code> next to the document</li><li><span class="m hang bullet">- </span>Light and dark, following your Mac</li></ul>
+<h2 class="block" id="free-then-once"><span class="m hang">## </span>Free, then once</h2>
+<ul class="block"><li><span class="m hang bullet">- </span><strong><span class="m">**</span>Free, for good:<span class="m">**</span></strong> open, read and edit in source mode, find and replace, the <code><span class="m">`</span>marka<span class="m">`</span></code> command, Quick Look.</li><li><span class="m hang bullet">- </span><strong><span class="m">**</span>Marka Pro:<span class="m">**</span></strong> Live mode, export, Vim, focus and typewriter modes, the folder sidebar, Quick Open and the outline. Free for 14 days, then one purchase: US$24.99 in the US, the App Store's local price elsewhere.</li></ul>
+<p class="block">No subscription, no account. Your files stay plain Markdown in your own folders, and Marka collects nothing about you.</p>
+<div class="block rule"><span class="m">---</span><hr></div>
+<p class="block"><a href="support.html"><span class="m">[</span>Support<span class="m">](support.html)</span></a> · <a href="privacy.html"><span class="m">[</span>Privacy<span class="m">](privacy.html)</span></a> · © 2026 Zhenlong He</p>
+</article>
+<article lang="zh-Hans" data-lang="zh" data-title="Marka — 小而快的 Mac Markdown 编辑器" data-description="Marka 边写边渲染 Markdown，像排字师傅一样处理中英混排，打开只要约 0.1 秒。原生应用，17 MB，没有订阅。">
+<div class="block image"><p class="src"><span class="m">![Marka 应用图标](icon.png)</span></p><figure class="icon"><img src="icon.png" alt="Marka 应用图标" width="128" height="128"></figure></div>
+<h1 class="block" id="marka"><span class="m hang"># </span>Marka</h1>
+<p class="block">小而快的 Mac Markdown 编辑器。边写边渲染，像排字师傅一样处理中英混排，打开只要十分之一秒左右。<span class="caret" aria-hidden="true"></span></p>
+<p class="block"><strong><span class="m">**</span>即将登陆 Mac App Store<span class="m">**</span></strong> · 免费下载 · macOS 15.2 或更新版本</p>
+<div class="block image"><p class="src"><span class="m">![Marka 的 Live 模式，正在编辑 notes.md](shots/editor-zh.webp)</span></p><figure class="window"><div class="bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="name">notes.md</span></div><picture><source srcset="shots/editor-zh-dark.webp" media="(prefers-color-scheme: dark)"><img src="shots/editor-zh-light.webp" alt="Marka 的 Live 模式，正在编辑 notes.md" width="1560" height="1050" loading="lazy" decoding="async"></picture></figure></div>
+<h2 class="block" id="小-而且快"><span class="m hang">## </span>小，而且快</h2>
+<p class="block">Marka 是原生 Mac 应用，不是套在窗口里的网页。字体、17 种语言的代码高亮全都算上，下载只有 17 MB。</p>
+<div class="block table"><table><thead><tr><th style="text-align:left"></th><th style="text-align:right"></th></tr></thead><tbody><tr><td style="text-align:left">启动到第一帧</td><td style="text-align:right">0.12 秒</td></tr><tr><td style="text-align:left">打开 1 MB、8.4 万行的文档</td><td style="text-align:right">0.13 秒</td></tr><tr><td style="text-align:left">按键到上屏（99 分位）</td><td style="text-align:right">1.8 毫秒</td></tr><tr><td style="text-align:left">下载大小</td><td style="text-align:right">17 MB</td></tr></tbody></table><pre class="src m">| | |
+|---|---:|
+| 启动到第一帧 | 0.12 秒 |
+| 打开 1 MB、8.4 万行的文档 | 0.13 秒 |
+| 按键到上屏（99 分位） | 1.8 毫秒 |
+| 下载大小 | 17 MB |</pre></div>
+<p class="block note">使用正式版构建，在 MacBook Pro（M4 Pro）、macOS 27 上实测。</p>
+<h2 class="block" id="live-模式-或者源码"><span class="m hang">## </span>Live 模式，或者源码</h2>
+<p class="block">Live 模式渲染光标所在块以外的一切，光标所在的块展开成 Markdown 源码。文字不会跳动，也没有另开一栏预览。按 <kbd>⌘/</kbd>，整篇文档立刻变回源码。</p>
+<blockquote class="block"><p><span class="m hang">&gt; </span>这一页就是按 Marka 排文档的方式排的。<br><span class="m hang">&gt; </span>按 ⌘/ 试试，或者点一下任意段落。</p></blockquote>
+<h2 class="block" id="中文和英文-排在一起"><span class="m hang">## </span>中文和英文，排在一起</h2>
+<ul class="block"><li><span class="m hang bullet">- </span>汉字与西文之间留四分之一个字宽，不管你有没有手打空格</li><li><span class="m hang bullet">- </span>标点不会出现在行首</li><li><span class="m hang bullet">- </span>中文强调用楷体，西文用<em><span class="m">*</span>斜体<span class="m">*</span></em></li><li><span class="m hang bullet">- </span>等宽西文字体配思源黑体，1.75 倍行距，读起来不累</li></ul>
+<h2 class="block" id="mac-上打开文件的地方-都有它"><span class="m hang">## </span>Mac 上打开文件的地方，都有它</h2>
+<h3 class="block" id="quick-look"><span class="m hang">### </span>Quick Look</h3>
+<p class="block">在访达里选中 Markdown 文件，按空格。预览和编辑器、导出用的是同一套渲染器，明暗模式都支持。</p>
+<div class="block image"><p class="src"><span class="m">![访达里 notes.md 的 Quick Look 预览](shots/quicklook-zh.webp)</span></p><figure class="quicklook"><div class="bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="name">notes.md</span><span class="open" aria-hidden="true">Marka</span></div><picture><source srcset="shots/quicklook-zh-dark.webp" media="(prefers-color-scheme: dark)"><img src="shots/quicklook-zh-light.webp" alt="访达里 notes.md 的 Quick Look 预览" width="1290" height="1050" loading="lazy" decoding="async"></picture></figure></div>
+<h3 class="block" id="marka-命令"><span class="m hang">### </span><code><span class="m">`</span>marka<span class="m">`</span></code> 命令</h3>
+<div class="block code"><span class="m fence">```sh</span><pre><code><span class="t-fn">marka</span> notes.md        <span class="t-com">  # 打开文件</span>
+<span class="t-fn">marka</span> notes.md:42     <span class="t-com">  # 跳到第 42 行</span>
+<span class="t-fn">marka</span> .               <span class="t-com">  # 在边栏打开当前文件夹</span>
+<span class="t-fn">git</span> log <span class="t-op">|</span> marka -     <span class="t-com">  # 打开管道输入</span>
+<span class="t-fn">marka</span> <span class="t-kw">-s</span> README.md    <span class="t-com">  # 直接进源码模式</span></code></pre><span class="m fence">```</span></div>
+<p class="block">在 <strong><span class="m">**</span>Marka ▸ 安装命令行工具…<span class="m">**</span></strong> 里选一个 <code><span class="m">`</span>PATH<span class="m">`</span></code> 中的文件夹即可。</p>
+<h3 class="block" id="键盘"><span class="m hang">### </span>键盘</h3>
+<p class="block">可选的 Vim 模式，带 Markdown 专用的文本对象（<code><span class="m">`</span>i*<span class="m">`</span></code>、<code><span class="m">`</span>il<span class="m">`</span></code>），<code><span class="m">`</span>w<span class="m">`</span></code>、<code><span class="m">`</span>b<span class="m">`</span></code> 能按词在中文里移动。<kbd>⌘1</kbd>–<kbd>⌘6</kbd> 设标题，<kbd>⌘P</kbd> 快速打开，<kbd>⇧⌘O</kbd> 看大纲。</p>
+<h3 class="block" id="还有"><span class="m hang">### </span>还有</h3>
+<ul class="block"><li><span class="m hang bullet">- </span>导出 HTML、PDF、富文本，排版和编辑器一致</li><li><span class="m hang bullet">- </span>专注当前句或当前段，打字机滚动</li><li><span class="m hang bullet">- </span>表格原地渲染，代码高亮支持 17 种语言</li><li><span class="m hang bullet">- </span>粘贴图片，自动存到文档旁的 <code><span class="m">`</span>assets/<span class="m">`</span></code></li><li><span class="m hang bullet">- </span>明暗模式跟随系统</li></ul>
+<h2 class="block" id="先免费-再一次买断"><span class="m hang">## </span>先免费，再一次买断</h2>
+<ul class="block"><li><span class="m hang bullet">- </span><strong><span class="m">**</span>永久免费：<span class="m">**</span></strong>打开、阅读、源码模式编辑、查找替换、<code><span class="m">`</span>marka<span class="m">`</span></code> 命令、Quick Look。</li><li><span class="m hang bullet">- </span><strong><span class="m">**</span>Marka Pro：<span class="m">**</span></strong>Live 模式、导出、Vim、专注与打字机模式、文件夹边栏、快速打开与大纲。免费试用 14 天，之后一次买断（美区 US$24.99，其他地区以 App Store 标价为准）。</li></ul>
+<p class="block">没有订阅，不用注册。文件始终是你自己文件夹里的纯 Markdown，Marka 不收集任何关于你的信息。</p>
+<div class="block rule"><span class="m">---</span><hr></div>
+<p class="block"><a href="support.html"><span class="m">[</span>支持<span class="m">](support.html)</span></a> · <a href="privacy.html"><span class="m">[</span>隐私<span class="m">](privacy.html)</span></a> · © 2026 Zhenlong He</p>
+</article>
 </main>
 
-<hr>
-
-<section id="zh" lang="zh-Hans">
-<h1>Marka</h1>
-<p class="lede">快速、原生的 Mac Markdown 编辑器，中文和英文一样好写。</p>
-
-<h2>免费版与 Pro</h2>
-<p>Marka 免费下载。所有 Pro 功能都可以试用 14 天；试用结束后继续使用免费版，或一次性解锁 Pro、永久使用。没有订阅。</p>
-<div class="tiers">
-  <div>
-    <h3>免费版</h3>
-    <ul>
-      <li>打开、阅读任何 Markdown 文件</li>
-      <li>源码模式编辑</li>
-      <li>查找替换（支持正则）</li>
-      <li><code>marka</code> 命令行工具</li>
-      <li>访达 Quick Look 预览</li>
-    </ul>
-  </div>
-  <div>
-    <h3>Pro</h3>
-    <ul>
-      <li>Live 模式</li>
-      <li>导出 HTML、PDF、富文本</li>
-      <li>Vim 模式</li>
-      <li>专注模式与打字机模式</li>
-      <li>文件夹边栏、快速打开与大纲</li>
-    </ul>
-  </div>
-</div>
-
-<h2>常见问题</h2>
-
-<h3>试用怎么算？</h3>
-<p>在 Marka 弹出的面板里，或 <strong>Marka ▸ Marka Pro…</strong> 中选择<strong>开始 14 天试用</strong>。试用是一个免费的 App 内购买，记在你的 Apple 账户上，只能开始一次，换一台 Mac 也一样。到期后 Marka 回到免费版，文档和设置都不受影响。</p>
-
-<h3>买了 Pro，这台 Mac 上却没解锁</h3>
-<p>打开 <strong>Marka ▸ Marka Pro…</strong>，选择<strong>恢复购买</strong>。请确认 App Store 登录的是购买时用的 Apple 账户。</p>
-
-<h3>怎么安装命令行工具？</h3>
-<p>选择 <strong>Marka ▸ 安装命令行工具…</strong>，选一个在 <code>PATH</code> 里的文件夹，比如 <code>/opt/homebrew/bin</code>。之后 <code>marka file.md</code> 打开文件，<code>marka .</code> 打开文件夹，<code>echo text | marka -</code> 打开管道输入。如果文件夹属于系统（比如 <code>/usr/local/bin</code>），Marka 会给出一行命令，在终端里执行即可。</p>
-
-<h3>Quick Look 不显示 Markdown 预览</h3>
-<p>安装后先打开一次 Marka。仍然不显示的话，到<strong>系统设置 ▸ 通用 ▸ 登录项与扩展 ▸ Quick Look</strong> 里确认 Marka 已打开。</p>
-
-<h3>其他问题</h3>
-<p>请写信到 <a href="mailto:zhenlonghe@gmail.com?subject=Marka">zhenlonghe@gmail.com</a>。最好附上 Marka 和 macOS 的版本（<strong>Marka ▸ 关于 Marka</strong>）；排版问题请附上出问题的 Markdown。</p>
-</section>
-
-<footer>© 2026 Zhenlong He · <a href="privacy.html">Privacy Policy</a> · <a href="privacy.html#zh" lang="zh-Hans">隐私政策</a></footer>
+<footer class="status" aria-live="off"><span class="mode"></span><span class="count"></span></footer>
+<script src="site.js" defer></script>
 </body>
 </html>

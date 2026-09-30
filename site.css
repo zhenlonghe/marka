@@ -1,0 +1,222 @@
+/* Marka's own editor, on the web: the same paper, ink, faces, measure and syntax behaviour.
+   html[data-mode] is Live or source; html[data-lang] picks the article. */
+
+@font-face { font-family: "Commit Mono"; src: url(fonts/CommitMono-400.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Commit Mono"; src: url(fonts/CommitMono-400-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Commit Mono"; src: url(fonts/CommitMono-700.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Marka Han"; src: url(fonts/NotoSansSC-Regular.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Marka Han"; src: url(fonts/NotoSansSC-Bold.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+
+:root {
+  --paper: #FBFAF7;
+  --ink: #26251F;
+  --muted: #5F5E57;
+  --markup: #A8A69E;
+  --rule: #E6E4DD;
+  --accent: #3A6EA5;
+  --caret: #F2701A;
+  --code: #8A4B2A;
+  --code-bg: #F1EFE9;
+  --selection: rgb(58 110 165 / 0.22);
+  --control: #FFFFFF;
+  --window-edge: rgb(38 37 31 / 0.12);
+  --shadow: 0 1px 2px rgb(38 37 31 / 0.06), 0 12px 28px -8px rgb(38 37 31 / 0.14), 0 40px 80px -24px rgb(38 37 31 / 0.22);
+  --text: "Commit Mono", "Marka Han", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", ui-monospace, monospace;
+  --kai: "Commit Mono", "Kaiti SC", "STKaiti", "KaiTi", "Marka Han", serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1B1B1D;
+    --ink: #DAD8D2;
+    --muted: #A3A199;
+    --markup: #66655F;
+    --rule: #2C2C2F;
+    --accent: #7AA7D8;
+    --caret: #FF8A3D;
+    --code: #D6A27A;
+    --code-bg: #252528;
+    --selection: rgb(122 167 216 / 0.22);
+    --control: #2C2C2F;
+    --window-edge: rgb(255 255 255 / 0.1);
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -8px rgb(0 0 0 / 0.4), 0 40px 80px -24px rgb(0 0 0 / 0.55);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; scrollbar-color: var(--rule) transparent; }
+body { margin: 0; font: 17px/1.75 var(--text); font-feature-settings: "calt" 0; text-autospace: normal; line-break: strict; overflow-wrap: break-word; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--selection); }
+a { color: var(--accent); text-decoration-line: underline; text-decoration-color: color-mix(in srgb, var(--accent) 38%, transparent); text-underline-offset: 0.22em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+/* ── Window chrome: file name on the left, view and language on the right ─────────── */
+
+.chrome {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 0.75rem;
+  height: 3.25rem; padding: 0 1.25rem;
+  background: var(--paper);
+  border-bottom: 1px solid transparent;
+  font-size: 13px; line-height: 1;
+  transition: border-color 0.2s;
+}
+.chrome.scrolled { border-bottom-color: var(--rule); }
+.home { display: flex; align-items: center; gap: 0.5rem; color: var(--ink); text-decoration: none; font-weight: 700; }
+.file { color: var(--markup); }
+.file::before { content: "/"; margin-right: 0.75rem; color: var(--rule); }
+.controls { margin-left: auto; display: flex; gap: 0.5rem; }
+.segmented { display: inline-flex; padding: 2px; border-radius: 8px; background: var(--code-bg); }
+.segmented button {
+  font: inherit; font-size: 12px; color: var(--muted); background: none; border: 0; cursor: pointer;
+  padding: 0.4rem 0.7rem; border-radius: 6px; min-height: 28px;
+  transition: color 0.15s, background-color 0.15s, box-shadow 0.15s;
+}
+.segmented button:hover { color: var(--ink); }
+.segmented button[aria-pressed="true"] { color: var(--ink); background: var(--control); box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 0 0 0.5px rgb(0 0 0 / 0.06); }
+.segmented kbd { margin-left: 0.4rem; color: var(--markup); font-size: 11px; }
+
+/* ── The document ──────────────────────────────────────────────────────────────── */
+
+main { max-width: calc(38em + 2.5rem); margin: 0 auto; padding: 3.5rem 1.25rem 8rem; }
+html:not([data-lang="zh"]) article[data-lang="zh"],
+html[data-lang="zh"] article[data-lang="en"] { display: none; }
+
+:where(.block) { position: relative; margin: 0 0 1.35em; }
+.block { position: relative; }
+h1, h2, h3 { font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; transition: font-size 0.28s var(--ease); }
+h1 { font-size: clamp(2.75rem, 8vw, 4.5rem); line-height: 1.05; margin: 0.15em 0 0.4em; letter-spacing: -0.03em; }
+h2 { font-size: 1.45em; margin: 3.2em 0 0.7em; }
+h3 { font-size: 1.1em; margin: 2.2em 0 0.4em; }
+article > h1 + p { font-size: 1.2em; line-height: 1.7; color: var(--ink); max-width: 30em; margin-bottom: 1.4em; }
+p.note { font-size: 13px; color: var(--muted); margin-top: -0.6em; }
+strong { font-weight: 700; }
+em { font-style: italic; font-synthesis: none; }
+:lang(zh-Hans) em { font-family: var(--kai); font-style: normal; }
+:lang(zh-Hans) em:lang(zh-Hans) { font-style: normal; }
+code { font-family: inherit; font-size: 0.92em; color: var(--code); background: var(--code-bg); padding: 0.1em 0.3em; border-radius: 4px; }
+kbd { font: inherit; font-size: 0.82em; padding: 0.05em 0.4em 0.1em; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 5px; background: var(--paper); white-space: nowrap; }
+
+ul { list-style: none; padding: 0; }
+li { position: relative; margin: 0 0 0.35em; }
+blockquote { margin-left: 0; padding-left: 1.1em; border-left: 2px solid var(--rule); color: var(--muted); transition: border-color 0.28s; }
+blockquote p { margin: 0; }
+
+.code { background: var(--code-bg); border-radius: 8px; padding: 1.1em 1.3em; overflow-x: auto; font-size: 15px; line-height: 1.7; }
+.code pre { margin: 0; }
+.code code { background: none; padding: 0; color: var(--ink); font-size: 1em; }
+.t-fn { color: #2F66A6; } .t-kw { color: #9A3E6B; } .t-op { color: var(--markup); } .t-com { color: #8C8A82; }
+@media (prefers-color-scheme: dark) { .t-fn { color: #82B1E0; } .t-kw { color: #D68FB4; } .t-com { color: #77756F; } }
+
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { height: 0; padding: 0; }
+td { padding: 0.7em 0; border-top: 1px solid var(--rule); vertical-align: baseline; }
+tr:last-child td { border-bottom: 1px solid var(--rule); }
+td:last-child { font-weight: 700; padding-left: 1em; white-space: nowrap; }
+.rule hr { border: 0; border-top: 1px solid var(--rule); margin: 4em 0 0; }
+article > .rule + p { font-size: 14px; color: var(--muted); }
+
+/* Task boxes, drawn like the app's. */
+.box { display: inline-block; width: 0.85em; height: 0.85em; margin-right: 0.6em; vertical-align: -0.08em; border: 1.5px solid var(--markup); border-radius: 3px; }
+.box.done { background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat; border-color: var(--accent); }
+
+/* The caret, in Marka's orange. */
+.caret { display: inline-block; width: 2px; height: 1.15em; margin-left: 2px; vertical-align: -0.2em; background: var(--caret); border-radius: 1px; animation: blink 1.06s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ── Markdown syntax: hidden in Live, grey in source, hanging in the gutter ───────── */
+
+.m { color: var(--markup); font-weight: 400; font-style: normal; font-family: var(--text); transition: font-size 0.28s var(--ease), opacity 0.28s; }
+.m.fence, .src, pre.src { display: none; }
+.m.hang { white-space: pre; }
+
+html[data-mode="live"] .m { font-size: 0; opacity: 0; }
+html[data-mode="live"] .m.hang { position: absolute; right: 100%; top: 0; }
+/* Live keeps list dashes, in the gutter and in blue, as the editor does. */
+html[data-mode="live"] .m.bullet { font-size: 17px; opacity: 1; color: var(--accent); line-height: inherit; }
+html[data-mode="live"] h1 > .m.hang, html[data-mode="live"] h2 > .m.hang, html[data-mode="live"] h3 > .m.hang { top: 50%; transform: translateY(-50%); }
+/* The title keeps its # in the gutter: the first sign this page is a Markdown document. */
+html[data-mode="live"] h1 > .m.hang { font-size: 0.42em; opacity: 1; padding-right: 0.35em; }
+/* The block you clicked opens up, like the one holding the cursor. */
+html[data-mode="live"] .block.active .m { font-size: 17px; opacity: 1; }
+html[data-mode="live"] .block.active h1 > .m.hang, html[data-mode="live"] h1.block.active > .m { font-size: 0.4em; }
+html[data-mode="live"] .code.active .m.fence { display: block; font-size: 15px; }
+html[data-mode="live"] .table.active table, html[data-mode="live"] .image.active figure { display: none; }
+html[data-mode="live"] .table.active pre.src, html[data-mode="live"] .image.active .src { display: block; }
+html[data-mode="live"] .table.active pre.src { font-size: 15px; margin: 0; white-space: pre; overflow-x: auto; }
+
+/* Source: the same text with nothing hidden and headings back at body size. */
+html[data-mode="source"] h1, html[data-mode="source"] h2, html[data-mode="source"] h3 { font-size: 1em; line-height: 1.75; letter-spacing: 0; margin: 1.35em 0; }
+html[data-mode="source"] article > h1 + p { font-size: 1em; max-width: none; }
+html[data-mode="source"] p.note { font-size: 1em; margin-top: 0; }
+html[data-mode="source"] .m.fence { display: block; }
+html[data-mode="source"] .code { background: none; padding: 0; border-radius: 0; font-size: 1em; }
+html[data-mode="source"] table, html[data-mode="source"] figure, html[data-mode="source"] .rule hr, html[data-mode="source"] .box { display: none; }
+html[data-mode="source"] pre.src, html[data-mode="source"] .src { display: block; }
+html[data-mode="source"] pre.src { font: inherit; margin: 0; white-space: pre; overflow-x: auto; }
+html[data-mode="source"] .src { margin: 0; }
+html[data-mode="source"] .image { margin: 0 0 1.35em; }
+html[data-mode="source"] blockquote { border-left-color: transparent; padding-left: 0; }
+html[data-mode="source"] code { background: none; padding: 0; }
+html[data-mode="source"] kbd { border-color: transparent; background: none; padding: 0; }
+html[data-mode="source"] .caret { display: none; }
+
+/* ── Frames: a Mac window and a Quick Look panel around real renders ────────────── */
+
+figure { margin: 0; }
+figure.icon img { display: block; width: 88px; height: 88px; margin-left: -6px; }
+.image { margin: 3rem 0 3.5rem; }
+.image:has(> figure.icon) { margin: 0 0 1.25rem; }
+figure.window, figure.quicklook { border-radius: 12px; overflow: hidden; background: var(--paper); box-shadow: 0 0 0 0.5px var(--window-edge), var(--shadow); }
+figure.window { width: min(66rem, 100vw - 2rem); margin-left: 50%; translate: -50% 0; }
+figure.quicklook { width: min(44rem, 100%); margin: 0 auto; border-radius: 14px; }
+figure img { display: block; width: 100%; height: auto; }
+.bar { position: relative; display: flex; align-items: center; height: 2.4rem; padding: 0 0.9rem; font: 13px/1 -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; color: var(--muted); border-bottom: 1px solid var(--rule); }
+.bar .name { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 600; }
+.lights { display: flex; gap: 8px; }
+.lights i { width: 12px; height: 12px; border-radius: 50%; background: #FF5F57; box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.12); }
+.lights i:nth-child(2) { background: #FEBC2E; }
+.lights i:nth-child(3) { background: #28C840; }
+.quicklook .open { margin-left: auto; padding: 0.3rem 0.65rem; border-radius: 6px; background: var(--code-bg); color: var(--ink); font-size: 12px; }
+.quicklook .open::before { content: "Open with "; }
+:lang(zh-Hans) .quicklook .open::before { content: "用 "; }
+:lang(zh-Hans) .quicklook .open::after { content: " 打开"; }
+
+/* The editor window rises into place once, on arrival. */
+@media (prefers-reduced-motion: no-preference) {
+  article > .image:first-of-type figure.window { animation: rise 1.1s var(--ease) 0.15s both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(28px) scale(0.985); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* ── Status bar: the editor's word count ───────────────────────────────────────── */
+
+.status { position: fixed; right: 1rem; bottom: 0.75rem; z-index: 10; display: flex; gap: 0.75rem; padding: 0.35rem 0.7rem; border-radius: 7px; background: var(--paper); font-size: 12px; color: var(--markup); box-shadow: 0 0 0 1px var(--rule); }
+.status .mode { color: var(--muted); }
+.status { transition: opacity 0.3s; }
+.status.clear { opacity: 0; visibility: hidden; pointer-events: none; }
+.status:empty { display: none; }
+
+/* ── Small screens ─────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  main { padding: 2rem 1rem 6rem 2.25rem; }
+  .chrome { padding: 0 0.75rem; gap: 0.5rem; }
+  .file { display: none; }
+  .segmented button { padding: 0.4rem 0.55rem; }
+  .segmented kbd { display: none; }
+  html[data-mode="live"] .m.bullet, html[data-mode="live"] .block.active .m { font-size: 16px; }
+  figure.window { width: calc(100vw - 1rem); margin-left: -1.75rem; translate: none; }
+  .code { font-size: 13px; padding: 1em; margin-right: -0.25rem; }
+  /* Comments under their command: the aligned column does not fit a phone. */
+  .code .t-com::before { content: "\A"; white-space: pre; }
+  .status { display: none; }
+}
+@media (max-width: 380px) { .home span { display: none; } }

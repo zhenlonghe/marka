@@ -1,100 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-mode="live">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marka – Privacy Policy</title>
-<meta name="description" content="Marka does not collect any data.">
-<link rel="stylesheet" href="style.css">
+<title>Marka — Privacy Policy</title>
+<meta name="description" content="Marka does not collect any data. Your documents stay on your Mac.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FBFAF7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1B1D" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Marka — Privacy Policy">
+<meta property="og:description" content="Marka does not collect any data. Your documents stay on your Mac.">
+<meta property="og:image" content="https://zhenlonghe.github.io/marka/icon.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preload" href="fonts/CommitMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
+<script>
+  // Before first paint: the visitor's language, so the other one never flashes.
+  (function () {
+    var lang;
+    try { lang = localStorage.getItem("marka.lang"); } catch (e) {}
+    var query = /[?&]lang=(en|zh)/.exec(location.search);
+    if (query) lang = query[1];
+    if (!lang) lang = /^zh/i.test((navigator.languages || [navigator.language])[0] || "") ? "zh" : "en";
+    document.documentElement.dataset.lang = lang;
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : "en";
+  })();
+</script>
 </head>
 <body>
-<header>
-  <a class="home" href="./">Marka</a>
-  <nav>
-    <a href="./">Support</a>
-    <a href="privacy.html" aria-current="page">Privacy</a>
-    <a href="#zh" lang="zh-Hans">中文</a>
-  </nav>
+<!--
+THESIS: The page is a Marka document in Live mode; ⌘/ turns the whole page back into its Markdown. Refuses the hero-screenshot-plus-feature-grid.
+OWN-WORLD: Marka's own editor: paper #FBFAF7 / ink #26251F (dark #1B1B1D / #DAD8D2), markup grey #A8A69E, accent #3A6EA5, orange caret #F2701A; Commit Mono with Noto Sans SC at 17/1.75 on a 38em measure; syntax hanging in the gutter; macOS window and Quick Look frames around real renders.
+STORY: A writer sees what Marka is (small, fast, native, bilingual typesetting), proves Live mode on the page itself, sees Finder and terminal fit, reads the honest price.
+FIRST VIEWPORT: Icon, "# Marka" large, the one-sentence pitch ending in a blinking caret, the App Store line, then the real editor window rising into view; top right: Live/Source and EN/中文; bottom right: the word-count status bar.
+FORM: Candidate 1 of 7 on the ordered list ("this page is a Marka document"); seed adb9ee64.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+<header class="chrome">
+  <a class="home" href="./"><img src="favicon.png" alt="" width="18" height="18"><span>Marka</span></a>
+  <span class="file">privacy.md</span>
+  <div class="controls">
+    <div class="segmented" role="group" aria-label="View" data-label-en="View" data-label-zh="视图">
+      <button type="button" data-mode="live" aria-pressed="true">Live</button>
+      <button type="button" data-mode="source" aria-pressed="false" data-en="Source" data-zh="源码">Source</button>
+    </div>
+    <div class="segmented" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-set-lang="zh" lang="zh-Hans" aria-pressed="false">中文</button>
+    </div>
+  </div>
 </header>
 
-<main>
-<h1>Privacy Policy</h1>
-<p class="meta">Effective September 30, 2026</p>
-<p class="lede">Marka does not collect any data. Your documents stay on your Mac.</p>
-
-<h2>What Marka does not do</h2>
-<ul>
-  <li>No account, sign-up or login.</li>
-  <li>No analytics, crash reporting, advertising or tracking of any kind.</li>
-  <li>No servers of its own. Nothing you write is sent anywhere.</li>
-</ul>
-
-<h2>Your documents</h2>
-<p>Marka runs in the macOS App Sandbox. It opens only the files and folders you choose, and saves them where they are. Images you paste are saved next to your document.</p>
-<p>The editor shows only images stored on your Mac. If a document links to an image on the web, that image may be downloaded when you export the document to PDF or rich text, or preview it with Quick Look, the same way a web browser would load it. The request goes to the website hosting the image, not to the developer.</p>
-
-<h2>Settings</h2>
-<p>Preferences, such as the editing mode or the folder shown in the sidebar, are stored on your Mac inside Marka’s own container. They never leave it.</p>
-
-<h2>Purchases</h2>
-<p>The 14-day trial and Marka Pro are in-app purchases handled entirely by Apple. To check whether they are active, Marka asks the App Store on your Mac. The developer does not receive your name, email address, Apple Account or payment details. Apple’s handling of purchases is described in <a href="https://www.apple.com/legal/privacy/">Apple’s Privacy Policy</a>.</p>
-
-<h2>Links</h2>
-<p>A link in a document opens in your web browser only when you Command-click it. What happens after that is between you and that website.</p>
-
-<h2>Quick Look</h2>
-<p>The Quick Look extension reads only the Markdown file being previewed, to draw the preview. It keeps nothing.</p>
-
-<h2>Children</h2>
-<p>Marka collects no information from anyone, including children.</p>
-
-<h2>Changes</h2>
-<p>If this policy ever changes, the new version will be posted on this page with a new effective date.</p>
-
-<h2>Contact</h2>
-<p><a href="mailto:zhenlonghe@gmail.com?subject=Marka%20privacy">zhenlonghe@gmail.com</a></p>
+<main id="document">
+<article lang="en" data-lang="en" data-title="Marka — Privacy Policy" data-description="Marka does not collect any data. Your documents stay on your Mac.">
+<h1 class="block" id="privacy-policy"><span class="m hang"># </span>Privacy Policy</h1>
+<p class="block note">Effective September 30, 2026</p>
+<p class="block">Marka does not collect any data. Your documents stay on your Mac.</p>
+<h2 class="block" id="what-marka-does-not-do"><span class="m hang">## </span>What Marka does not do</h2>
+<ul class="block"><li><span class="m hang bullet">- </span>No account, sign-up or login.</li><li><span class="m hang bullet">- </span>No analytics, crash reporting, advertising or tracking of any kind.</li><li><span class="m hang bullet">- </span>No servers of its own. Nothing you write is sent anywhere.</li></ul>
+<h2 class="block" id="your-documents"><span class="m hang">## </span>Your documents</h2>
+<p class="block">Marka runs in the macOS App Sandbox. It opens only the files and folders you choose, and saves them where they are. Images you paste are saved next to your document.</p>
+<p class="block">The editor shows only images stored on your Mac. If a document links to an image on the web, that image may be downloaded when you export the document to PDF or rich text, or preview it with Quick Look, the same way a web browser would load it. The request goes to the website hosting the image, not to the developer.</p>
+<h2 class="block" id="settings"><span class="m hang">## </span>Settings</h2>
+<p class="block">Preferences, such as the editing mode or the folder shown in the sidebar, are stored on your Mac inside Marka's own container. They never leave it.</p>
+<h2 class="block" id="purchases"><span class="m hang">## </span>Purchases</h2>
+<p class="block">The 14-day trial and Marka Pro are in-app purchases handled entirely by Apple. To check whether they are active, Marka asks the App Store on your Mac. The developer does not receive your name, email address, Apple Account or payment details. Apple's handling of purchases is described in <a href="https://www.apple.com/legal/privacy/" rel="noopener"><span class="m">[</span>Apple's Privacy Policy<span class="m">](https://www.apple.com/legal/privacy/)</span></a>.</p>
+<h2 class="block" id="links"><span class="m hang">## </span>Links</h2>
+<p class="block">A link in a document opens in your web browser only when you Command-click it. What happens after that is between you and that website.</p>
+<h2 class="block" id="quick-look"><span class="m hang">## </span>Quick Look</h2>
+<p class="block">The Quick Look extension reads only the Markdown file being previewed, to draw the preview. It keeps nothing.</p>
+<h2 class="block" id="children"><span class="m hang">## </span>Children</h2>
+<p class="block">Marka collects no information from anyone, including children.</p>
+<h2 class="block" id="changes"><span class="m hang">## </span>Changes</h2>
+<p class="block">If this policy ever changes, the new version will be posted on this page with a new effective date.</p>
+<h2 class="block" id="contact"><span class="m hang">## </span>Contact</h2>
+<p class="block"><a href="mailto:zhenlonghe@gmail.com?subject=Marka%20privacy"><span class="m">[</span>zhenlonghe@gmail.com<span class="m">](mailto:zhenlonghe@gmail.com?subject=Marka%20privacy)</span></a></p>
+<div class="block rule"><span class="m">---</span><hr></div>
+<p class="block"><a href="./"><span class="m">[</span>Marka<span class="m">](./)</span></a> · <a href="support.html"><span class="m">[</span>Support<span class="m">](support.html)</span></a> · © 2026 Zhenlong He</p>
+</article>
+<article lang="zh-Hans" data-lang="zh" data-title="Marka — 隐私政策" data-description="Marka 不收集任何数据。你的文档只留在你的 Mac 上。">
+<h1 class="block" id="隐私政策"><span class="m hang"># </span>隐私政策</h1>
+<p class="block note">生效日期：2026 年 9 月 30 日</p>
+<p class="block">Marka 不收集任何数据。你的文档只留在你的 Mac 上。</p>
+<h2 class="block" id="marka-不做的事"><span class="m hang">## </span>Marka 不做的事</h2>
+<ul class="block"><li><span class="m hang bullet">- </span>没有账户，不需要注册或登录。</li><li><span class="m hang bullet">- </span>没有统计分析、崩溃上报、广告或任何形式的追踪。</li><li><span class="m hang bullet">- </span>没有自己的服务器。你写的任何内容都不会被发送出去。</li></ul>
+<h2 class="block" id="你的文档"><span class="m hang">## </span>你的文档</h2>
+<p class="block">Marka 在 macOS App 沙盒中运行，只打开你选择的文件和文件夹，并保存在原处。粘贴的图片保存在文档旁边。</p>
+<p class="block">编辑器只显示存在你 Mac 上的图片。如果文档引用了网络上的图片，在导出 PDF、拷贝为富文本或用 Quick Look 预览时，这些图片可能会像在浏览器里一样被下载。请求发往托管图片的网站，而不是开发者。</p>
+<h2 class="block" id="设置"><span class="m hang">## </span>设置</h2>
+<p class="block">编辑模式、边栏文件夹等偏好设置保存在你的 Mac 上 Marka 自己的容器里，不会离开这台 Mac。</p>
+<h2 class="block" id="购买"><span class="m hang">## </span>购买</h2>
+<p class="block">14 天试用和 Marka Pro 都是 App 内购买，完全由 Apple 处理。为了确认它们是否有效，Marka 会向 Mac 上的 App Store 查询。开发者不会获得你的姓名、邮箱、Apple 账户或付款信息。Apple 如何处理购买，见 <a href="https://www.apple.com/legal/privacy/" rel="noopener"><span class="m">[</span>Apple 隐私政策<span class="m">](https://www.apple.com/legal/privacy/)</span></a>。</p>
+<h2 class="block" id="链接"><span class="m hang">## </span>链接</h2>
+<p class="block">文档里的链接只有在你按住 Command 点击时才会在浏览器中打开。之后发生的事与该网站有关。</p>
+<h2 class="block" id="quick-look"><span class="m hang">## </span>Quick Look</h2>
+<p class="block">Quick Look 扩展只读取正在预览的 Markdown 文件，用来绘制预览，不保留任何内容。</p>
+<h2 class="block" id="儿童"><span class="m hang">## </span>儿童</h2>
+<p class="block">Marka 不收集任何人的信息，包括儿童。</p>
+<h2 class="block" id="变更"><span class="m hang">## </span>变更</h2>
+<p class="block">如果本政策有变化，新版本会发布在此页面，并更新生效日期。</p>
+<h2 class="block" id="联系"><span class="m hang">## </span>联系</h2>
+<p class="block"><a href="mailto:zhenlonghe@gmail.com?subject=Marka%20privacy"><span class="m">[</span>zhenlonghe@gmail.com<span class="m">](mailto:zhenlonghe@gmail.com?subject=Marka%20privacy)</span></a></p>
+<div class="block rule"><span class="m">---</span><hr></div>
+<p class="block"><a href="./"><span class="m">[</span>Marka<span class="m">](./)</span></a> · <a href="support.html"><span class="m">[</span>支持<span class="m">](support.html)</span></a> · © 2026 Zhenlong He</p>
+</article>
 </main>
 
-<hr>
-
-<section id="zh" lang="zh-Hans">
-<h1>隐私政策</h1>
-<p class="meta">生效日期：2026 年 9 月 30 日</p>
-<p class="lede">Marka 不收集任何数据。你的文档只留在你的 Mac 上。</p>
-
-<h2>Marka 不做的事</h2>
-<ul>
-  <li>没有账户，不需要注册或登录。</li>
-  <li>没有统计分析、崩溃上报、广告或任何形式的追踪。</li>
-  <li>没有自己的服务器。你写的任何内容都不会被发送出去。</li>
-</ul>
-
-<h2>你的文档</h2>
-<p>Marka 在 macOS App 沙盒中运行，只打开你选择的文件和文件夹，并保存在原处。粘贴的图片保存在文档旁边。</p>
-<p>编辑器只显示存在你 Mac 上的图片。如果文档引用了网络上的图片，在导出 PDF、拷贝为富文本或用 Quick Look 预览时，这些图片可能会像在浏览器里一样被下载。请求发往托管图片的网站，而不是开发者。</p>
-
-<h2>设置</h2>
-<p>编辑模式、边栏文件夹等偏好设置保存在你的 Mac 上 Marka 自己的容器里，不会离开这台 Mac。</p>
-
-<h2>购买</h2>
-<p>14 天试用和 Marka Pro 都是 App 内购买，完全由 Apple 处理。为了确认它们是否有效，Marka 会向 Mac 上的 App Store 查询。开发者不会获得你的姓名、邮箱、Apple 账户或付款信息。Apple 如何处理购买，见 <a href="https://www.apple.com/legal/privacy/">Apple 隐私政策</a>。</p>
-
-<h2>链接</h2>
-<p>文档里的链接只有在你按住 Command 点击时才会在浏览器中打开。之后发生的事与该网站有关。</p>
-
-<h2>Quick Look</h2>
-<p>Quick Look 扩展只读取正在预览的 Markdown 文件，用来绘制预览，不保留任何内容。</p>
-
-<h2>儿童</h2>
-<p>Marka 不收集任何人的信息，包括儿童。</p>
-
-<h2>变更</h2>
-<p>如果本政策有变化，新版本会发布在此页面，并更新生效日期。</p>
-
-<h2>联系</h2>
-<p><a href="mailto:zhenlonghe@gmail.com?subject=Marka%20privacy">zhenlonghe@gmail.com</a></p>
-</section>
-
-<footer>© 2026 Zhenlong He · <a href="./">Support</a></footer>
+<footer class="status" aria-live="off"><span class="mode"></span><span class="count"></span></footer>
+<script src="site.js" defer></script>
 </body>
 </html>
